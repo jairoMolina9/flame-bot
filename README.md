@@ -1,4 +1,5 @@
 # flame-bot
-npm init
-npm install --save discord.js
+Requirements: <br>
+npm init <br>
+npm install --save discord.js <br>
 npm install --save insults
