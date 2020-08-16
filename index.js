@@ -1,9 +1,10 @@
+require('dotenv').config();
 const insulter = require('insults');
 
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
-const token = 'NzQ0MjkwOTQwMDAwMjcyNDk0.XzhE9A.wxUtWI_H5HFcmYCLRL7-UuOTLIQ';
+const token = process.env.TOKEN;
 
 const raymond = ['hang up with your girl god dam!',
                 'go wash your dishes mmg',
