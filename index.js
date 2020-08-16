@@ -3,7 +3,7 @@ const insulter = require('insults');
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
-const token = 'NzQ0MjkwOTQwMDAwMjcyNDk0.XzhE9A.xjM3GjiRhYZaiDpjP8k_UYIlf74';
+const token = 'NzQ0MjkwOTQwMDAwMjcyNDk0.XzhE9A.wxUtWI_H5HFcmYCLRL7-UuOTLIQ';
 
 const raymond = ['hang up with your girl god dam!',
                 'go wash your dishes mmg',
@@ -25,7 +25,8 @@ const jairo = ['stop talking to ur ex goddam!',
               'cabeza huevo head ass',
               'stfu and go make me an alexa skill',
               'You have a small peepee!',
-              'If there exist a competence of ugly people they wouldnt let you participate... I dont think they would accept professionals'
+              'If there exist a competence of ugly people they wouldnt let you participate... I dont think they would accept professionals',
+              'stop writing 🍝 code 🤢 🤮'
               ];
 
 const ramon = ['put on a timer before I tell your mom!',
