@@ -12,4 +12,6 @@ Add a `.env` file in the root directory and include token:
 TOKEN=ADD_TOKEN_HERE
 ```
 
+Test #2
+=======
 ## Test changes
