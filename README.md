@@ -4,6 +4,7 @@
 npm init <br>
 npm install --save discord.js <br>
 npm install --save insults
+npm install --save firebase-admin
 
 ## Environment Variables
 
