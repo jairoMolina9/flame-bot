@@ -1,88 +1,96 @@
 require('dotenv').config();
 const insulter = require('insults');
-
 const Discord = require('discord.js');
+var admin = require("firebase-admin");
+const {
+  getRandom
+} = require('./giphy');
+
+var serviceAccount = require("./serviceAccountKey.json");
+
 const bot = new Discord.Client();
 
-const token = process.env.TOKEN;
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: process.env.DB_URL
+}); //connect to firebase
 
-const raymond = ['hang up with your girl god dam!',
-                'go wash your dishes mmg',
-                'stop eating raw chicken my frienddd',
-                'are u dominican or chinese?',
-                'ur sister going to turn off the wifi mmg',
-                ' U are the only chinese I know that had forgot his chinese name'
-                ];
+const db = admin.firestore(); //access to database
 
-const edwin = ['grow the fuck up!',
-                'learn how to aim mmg',
-                'stop simping mamahuevasho!',
-                'Plants grow with water... Have u tried to spread sum on ur feets?',
-                'shush your little ass up',
-                'hurry up and shit faster damn, thats why your mom gotta call the plumber to fix your toilet'
-                ];
-
-const jairo = ['stop talking to ur ex goddam!',
-              'cabeza huevo head ass',
-              'stfu and go make me an alexa skill',
-              'You have a small peepee!',
-              'If there exist a competence of ugly people they wouldnt let you participate... I dont think they would accept professionals',
-              'stop writing 🍝 code 🤢 🤮'
-              ];
-
-const ramon = ['put on a timer before I tell your mom!',
-              'tell edwin to give u shields and stfu',
-              'go to sleep before ur dad wakes up',
-              ' Its past your bedtime little boy!',
-              'stop playing valorant mmg'
-              ];
 
 bot.on('ready', () => {
   console.log('bot is online!');
 })
 
 bot.on('message', message => {
-  let str = message.content;
+  let str = message.content.replace(/\s+/g, ' ');
+    if (str.includes('!flame')) {
 
+      if (str === '!flame help') {
+        message.channel.send('help message here');
+      } else if (str.includes('<@') && str.includes('save')) { //save flame
 
-  if(str.includes('!flame')) {
+        let user_id = message.mentions.users.first().id;
 
-    if(str === '!flame help') { //if is for help
-      message.channel.send('fuck u,you can ask <@!396848755086721044>');
-    }else if (str.includes('<@')) { //if its an user
+        let flame = str.substring(str.lastIndexOf('>') + 1, str.length);
 
-      let mention = str.substring(str.lastIndexOf('<'), str.lastIndexOf('>') + 1); //mention msg
+        if (flame === "") {
+          message.channel.send("🔥 Write a flame, are you stoopid? 🔥");
+        } else {
+          const docRef = db.collection('users').doc(user_id);
 
-      let user = str.substring(str.lastIndexOf('@') +1, str.lastIndexOf('>')); //matches user in switch
+          docRef.get().catch(function(error) {
+            console.log("Error getting document:", error);
+          }).then(function(doc) {
+            if (doc.exists) { //user exists
+              docRef.update({
+                flames: admin.firestore.FieldValue.arrayUnion(flame)
+              });
+            } else { //user does not exist
+              let newArray = [flame];
 
-      if(user.includes('!')) //checks if bot requested by admin or user
-        user = str.substring(str.lastIndexOf('!') +1, str.length-1);
+              docRef.set({
+                flames: newArray
+              });
+            }
+            message.channel.send("🔥 Saved 🔥");
+          });
+        }
+      } else if (str.includes('<@')) { //flame an user
+        let user_id = message.mentions.users.first().id;
 
+        let mention = '<@'.concat(user_id).concat('>');
 
-      switch(user) {
-        case '265370609800839168':
-          message.channel.send("🔥🔥 " + mention + ", " + raymond[Math.floor(Math.random() * raymond.length)] + " 🔥🔥");
-          break;
-        case '246125284753932288':
-          message.channel.send("🔥🔥 " + mention + ", " + edwin[Math.floor(Math.random() * edwin.length)] + " 🔥🔥");
-          break;
-        case '396848755086721044':
-          message.channel.send("🔥🔥 " + mention + ", " + jairo[Math.floor(Math.random() * jairo.length)] + " 🔥🔥");
-          break;
-        case '255333775284633601':
-        message.channel.send("🔥🔥 "+ mention + ", " + ramon[Math.floor(Math.random() * ramon.length)] + " 🔥🔥");
-        break;
-        default:
-        message.channel.send(mention + ", " + insulter.default()
- + " KLK MMG");
-        break;
+        if (str.includes('random')) {
+          message.channel.send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥");
+        } else {
+          const docRef = db.collection('users').doc(user_id);
+
+          docRef.get().catch(function(error) {
+            console.log("Error getting document:", error);
+          }).then(function(doc) {
+            if (doc.exists) {
+              let data = doc.data();
+
+              let index = Math.floor(Math.random() *
+                data['flames'].length);
+
+              getRandom()
+                .then(function(giphy) {
+                  message.channel.send("🔥🔥 " + mention + ", " + data['flames'][index] + " 🔥🔥\n" + giphy.url);
+                });
+            } else { //if user has no custom flames
+              getRandom()
+                .then(function(giphy) {
+                  message.channel.send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥\n" + giphy.url);
+                });
+            }
+          });
+        }
+      } else { //if it is not help and its not an user
+        message.channel.send('Write !flame help, to learn more about the commands');
       }
-    } else { //if it is not help and its not an user
-      message.channel.send('🔥🔥 MAMAHUEVASHOOOO!! 🔥🔥 \n' + insulter.default() + ' K L K  🔥🔥 ');
     }
+});
 
-  }
-
-})
-
-bot.login(token);
+bot.login(process.env.TOKEN);
