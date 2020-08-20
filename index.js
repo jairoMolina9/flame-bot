@@ -5,6 +5,9 @@ var admin = require("firebase-admin");
 const {
   getRandom
 } = require('./giphy');
+const {
+  getHelp
+} = require('./help')
 
 var serviceAccount = require("./serviceAccountKey.json");
 
@@ -23,12 +26,14 @@ bot.on('ready', () => {
 })
 
 bot.on('message', message => {
+  if(message.author.bot) return;
+
   let str = message.content.replace(/\s+/g, ' ');
     if (str.includes('!flame')) {
 
       if (str === '!flame help') {
-        message.channel.send('help message here');
-      } else if (str.includes('<@') && str.includes('save')) { //save flame
+        message.channel.send(getHelp());
+      } else if (str.includes('<@') && str.includes('-s')) { //save flame
 
         let user_id = message.mentions.users.first().id;
 
@@ -61,7 +66,7 @@ bot.on('message', message => {
 
         let mention = '<@'.concat(user_id).concat('>');
 
-        if (str.includes('random')) {
+        if (str.includes('-r')) {
           getRandom()
             .then(function(giphy) {
               message.channel.send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥\n" + giphy.url);
@@ -91,7 +96,7 @@ bot.on('message', message => {
           });
         }
       } else { //if it is not help and its not an user
-        message.channel.send('Write !flame help, to learn more about the commands');
+        message.channel.send('Type `!flame help`.');
       }
     }
 });
