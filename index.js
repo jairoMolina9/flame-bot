@@ -62,7 +62,10 @@ bot.on('message', message => {
         let mention = '<@'.concat(user_id).concat('>');
 
         if (str.includes('random')) {
-          message.channel.send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥");
+          getRandom()
+            .then(function(giphy) {
+              message.channel.send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥\n" + giphy.url);
+            });
         } else {
           const docRef = db.collection('users').doc(user_id);
 
