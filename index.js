@@ -67,15 +67,14 @@ bot.on("message", (message) => {
       let mention = "<@".concat(user_id).concat(">");
 
       if (str.includes("-r")) {
-        message.channel
-          .send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥")
-          .then(function (message) {
-            getRandom().then(function (giphy) {
-              message.channel.send({
-                files: [giphy.images.original.url],
-              });
-            });
-          });
+        getRandom().then(function (giphy) {
+          message.channel.send(
+            "🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥",
+            {
+              files: [giphy.images.fixed_height.url],
+            }
+          );
+        });
       } else {
         const docRef = db.collection("users").doc(user_id);
 
@@ -87,43 +86,36 @@ bot.on("message", (message) => {
           .then(function (doc) {
             if (doc.exists) {
               let data = doc.data();
-
               let index = Math.floor(Math.random() * data["flames"].length);
 
-              message.channel
-                .send(
-                  "🔥🔥 " + mention + ", " + data["flames"][index] + " 🔥🔥"
-                )
-                .then(function (message) {
-                  getRandom().then(function (giphy) {
-                    message.channel.send({
-                      files: [giphy.images.original.url],
-                    });
-                  });
-                })
-                .catch(function (error) {
-                  message.channel.send("couldn't load the gif :()");
-                });
+              getRandom().then(function (giphy) {
+                message.channel.send(
+                  "🔥🔥 " + mention + ", " + data["flames"][index] + " 🔥🔥",
+                  {
+                    files: [giphy.images.fixed_height.url],
+                  }
+                );
+              });
             } else {
               //if user has no custom flames
-              message.channel
-                .send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥")
-                .then(function (message) {
-                  getRandom().then(function (giphy) {
-                    message.channel.send({
-                      files: [giphy.images.original.url],
-                    });
-                  });
-                });
+              getRandom().then(function (giphy) {
+                message.channel.send(
+                  "🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥",
+                  {
+                    files: [giphy.images.fixed_height.url],
+                  }
+                );
+              });
             }
           });
       }
-  } else {
-    //if it is not help and its not an user
-    message.channel.send("Write !flame help, to learn more about the commands");
+    } else {
+      //if it is not help and its not an user
+      message.channel.send(
+        "Write !flame help, to learn more about the commands"
+      );
+    }
   }
-}
-
 });
 
 bot.login(process.env.TOKEN);
