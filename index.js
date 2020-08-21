@@ -3,6 +3,7 @@ const insulter = require("insults");
 const Discord = require("discord.js");
 var admin = require("firebase-admin");
 const { getRandom } = require("./giphy");
+const { getHelp } = require("./help");
 
 var serviceAccount = require("./serviceAccountKey.json");
 
@@ -19,12 +20,18 @@ bot.on("ready", () => {
   console.log("bot is online!");
 });
 
+bot.on("ready", () => {
+  console.log("bot is online!");
+});
+
 bot.on("message", (message) => {
+  if (message.author.bot) return;
+
   let str = message.content.replace(/\s+/g, " ");
   if (str.includes("!flame")) {
     if (str === "!flame help") {
-      message.channel.send("help message here");
-    } else if (str.includes("<@") && str.includes("save")) {
+      message.channel.send(getHelp());
+    } else if (str.includes("<@") && str.includes("-s")) {
       //save flame
 
       let user_id = message.mentions.users.first().id;
@@ -63,7 +70,7 @@ bot.on("message", (message) => {
       let user_id = message.mentions.users.first().id;
       let mention = "<@".concat(user_id).concat(">");
 
-      if (str.includes("random")) {
+      if (str.includes("-r")) {
         message.channel
           .send("🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥")
           .then(function (message) {
@@ -116,12 +123,10 @@ bot.on("message", (message) => {
             }
           });
       }
-    } else {
-      //if it is not help and its not an user
-      message.channel.send(
-        "Write !flame help, to learn more about the commands"
-      );
     }
+  } else {
+    //if it is not help and its not an user
+    message.channel.send("Write !flame help, to learn more about the commands");
   }
 });
 
