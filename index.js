@@ -20,10 +20,6 @@ bot.on("ready", () => {
   console.log("bot is online!");
 });
 
-bot.on("ready", () => {
-  console.log("bot is online!");
-});
-
 bot.on("message", (message) => {
   if (message.author.bot) return;
 
@@ -100,7 +96,6 @@ bot.on("message", (message) => {
                 )
                 .then(function (message) {
                   getRandom().then(function (giphy) {
-                    console.log(giphy.images.original);
                     message.channel.send({
                       files: [giphy.images.original.url],
                     });
