@@ -118,11 +118,12 @@ bot.on("message", (message) => {
             }
           });
       }
-    }
   } else {
     //if it is not help and its not an user
     message.channel.send("Write !flame help, to learn more about the commands");
   }
+}
+
 });
 
 bot.login(process.env.TOKEN);
