@@ -5,8 +5,7 @@ module.exports = {
   name: "flame-stats",
   description: "Sends stats of an user",
   execute(message, args) {
-
-    if (!args.length) { //print stats of everyone in DB
+    if (args[0] === "@everyone" || args[0] === "here" || !args.length) { //print stats of everyone in DB
       message.guild.members.fetch().then((fetchedMembers) => {
 
         const membersList = fetchedMembers.filter((member) => member.user.id !== message.author.id && !member.user.bot);
@@ -32,17 +31,18 @@ module.exports = {
         });
       });
     } else if (message.mentions.users.first()) { //prints stats of an user
-      const data = getStats(message.mentions.users.first().id);
+      const member = message.mentions.users.first();
+      const data = getStats(member.id);
       let avatarURL = "";
-      if (!member.user.avatar)
+      if (!member.avatar)
         avatarURL = "https://media.giphy.com/media/3ohzdYDKUSkwOeXtrW/giphy.gif";
       else
-        avatarURL = `https://cdn.discordapp.com/avatars/${member.user.id}/${member.user.avatar}.` + ("png" || "jpeg" || "webp" || "gif");
+        avatarURL = `https://cdn.discordapp.com/avatars/${member.id}/${member.avatar}.` + ("png" || "jpeg" || "webp" || "gif");
 
       data.then(function(result) {
         const statsEmbeded = new Discord.MessageEmbed()
           .setColor('#ff2a00')
-          .setTitle(`🔥 ${message.mentions.users.first().username} Stats 🔥`)
+          .setTitle(`🔥 ${member.username} Stats 🔥`)
           .setThumbnail(avatarURL)
           .addFields({
             name: '\u200b',
