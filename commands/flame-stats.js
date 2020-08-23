@@ -30,9 +30,16 @@ module.exports = {
           message.channel.send(statsEmbeded);
         });
       });
-    } else if (message.mentions.users.first()) { //prints stats of an user
-      const member = message.mentions.users.first();
+    } else if (args[0] === "me" || message.mentions.users.first()) { //prints stats of an user
+      let member = "";
+
+      if(args[0] === "me")
+        member = message.author;
+      else
+        member = message.mentions.users.first();
+
       const data = getStats(member.id);
+      
       let avatarURL = "";
       if (!member.avatar)
         avatarURL = "https://media.giphy.com/media/3ohzdYDKUSkwOeXtrW/giphy.gif";
