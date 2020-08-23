@@ -38,6 +38,7 @@ client.on("message", (message) => {
       case "flame-help":
       case "flame-save":
       case "flame-random":
+      case "flame-stats":
       case "flame":
         client.commands.get(command).execute(message, args);
         break;
