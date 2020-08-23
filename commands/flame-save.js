@@ -28,7 +28,7 @@ module.exports = {
 
     let flame = flameArray.join(" ");
 
-    const docRef = admin.firestore().collection("users").doc(user_id)
+    const docRef = admin.firestore().collection("users").doc(user_id);
 
     docRef
       .get()

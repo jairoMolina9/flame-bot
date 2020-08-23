@@ -1,5 +1,6 @@
 const { admin } = require('../firestore');
 const { getRandom } = require("../giphy");
+const stats = require("../stats");
 const insulter = require("insults");
 
 module.exports = {
@@ -7,18 +8,16 @@ module.exports = {
   description: "Sends custom flame to user",
   execute(message, args) {
 
-    //outside bc it is used in code below line 23
-    let user_id = "";
-    let mention = "";
-    try {
-      user_id = message.mentions.users.first().id;
-      mention  = "<@".concat(user_id).concat(">");
-    } catch (error) {
-        message.reply("mention an user!");
+    if(!message.mentions.users.first()) {
+      message.reply("mention an user!");
       return;
     }
 
-    const docRef = admin.firestore().collection("users").doc(user_id)
+    let mention_user_id = message.mentions.users.first().id;
+    let mention = `<@${mention_user_id}>`;
+
+
+    const docRef = admin.firestore().collection("users").doc(mention_user_id)
 
     docRef
       .get()
@@ -27,7 +26,7 @@ module.exports = {
       })
       .then(function (doc) {
         if (doc.exists) {
-          let data = doc.data(); //array of custom flames
+          let data = doc.data(); //array of document data
           let index = Math.floor(Math.random() * data["flames"].length);
 
           getRandom().then(function (giphy) {
@@ -53,6 +52,10 @@ module.exports = {
               .then((sentMessage) => sentMessage.react("🔥"));
           });
         }
+
+        //update users stats
+        stats.updateFlamer(message.author.id);
+        stats.updateFlamed(mention_user_id);
       });
 
   },
