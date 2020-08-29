@@ -23,7 +23,7 @@ module.exports = {
     getRandom().then(function(giphy) {
       message.channel
         .send(
-          "🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥", {
+          `🔥🔥 ${mention}, `{insulter.default()} 🔥🔥`, {
             files: [giphy.images.fixed_height.url],
           }
         )
