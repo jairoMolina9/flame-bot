@@ -9,11 +9,11 @@ module.exports = {
   execute(message, args) {
 
     //outside bc it is used in code below line 23
-    let user_id = "";
-    let mention = "";
     try {
-      user_id = message.mentions.users.first().id;
-      mention = "<@".concat(user_id).concat(">");
+      if(!message.mentions.users.first()) throw new Error('No user mentioned');
+      const { id: userId } = message.mentions.users.first();
+      const mention = `<@${userId}>`;
+     }
     } catch (error) {
       message.reply("mention an user!");
       return;
