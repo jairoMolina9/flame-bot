@@ -1,25 +1,18 @@
-const { getRandom } = require("../giphy");
-const stats = require("../stats");
-const insulter = require("insults");
+const { getRandom } = require('../giphy');
+const insulter = require('insults');
 
 module.exports = {
-  name: "flame-random",
-  description: "Sends random flame to user",
+  name: 'flame-random',
+  description: 'Sends random flame to user',
   execute(message, args) {
-
-    if(!message.mentions.users.first()) {
-      message.reply("mention an user!");
-      return;
-    }
-
-    let mention_user_id = message.mentions.users.first().id;
-    let mention = `<@${mention_user_id}>`;
-
-
-    getRandom().then(function(giphy) {
-      message.channel
-        .send(
-          "🔥🔥 " + mention + ", " + insulter.default() + " 🔥🔥", {
+    try {
+      if (!message.mentions.users.size) throw new Error('no user mentioned!');
+      const { id: userId } = message.mentions.users.first();
+      const mention = `<@${userId}>`;
+      
+      getRandom().then(function (giphy) {
+        message.channel
+          .send(`🔥🔥 ${mention}, ${insulter.default()} 🔥🔥`, {
             files: [giphy.images.fixed_height.url],
           }
         )
@@ -29,6 +22,8 @@ module.exports = {
     //update users stats
     stats.updateFlamer(message.author.id);
     stats.updateFlamed(mention_user_id);
-
+    } catch (error) {
+      message.reply(error.message);
+    }
   },
 };
