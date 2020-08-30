@@ -29,10 +29,10 @@ function updateFlamed(user_id) {
   const docRef = admin.firestore().collection("users-stats").doc(user_id);
 
   docRef
-    .get()
     .catch(function(error) {
       console.error("Error getting document:", error);
     })
+    .get()
     .then(function(doc) {
       if (doc.exists) {
         //user exists
