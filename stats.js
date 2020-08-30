@@ -76,6 +76,4 @@ async function getStats(user_id) {
   return arr;
 }
 
-module.exports.updateFlamer = updateFlamer;
-module.exports.updateFlamed = updateFlamed;
-module.exports.getStats = getStats;
+module.exports = { updateFlamer, updateFlamed, getStats };
