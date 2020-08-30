@@ -14,7 +14,7 @@ module.exports = {
         {
           name: 'Commands',
           value:
-            '`!flame-help` - shows this message.\n`!flame @user` - sends saved or random flame with random gif.\n`!flame-save @user text` - saves a custom flame **(1)**.\n`!flame-random @user` - sends random flame.\n`!flame-giphy @user text` - sends saved or random flame with custom gif **(2)**',
+            '`!flame-help` - shows this message.\n`!flame @user` - sends saved or random flame with random gif.\n`!flame-save @user text` - saves a custom flame **(1)**.\n`!flame-random @user` - sends random flame.\n`!flame-giphy @user text` - sends saved or random flame with custom gif **(2)** \n`!flame-stats @user` - shows stats of an user',
         },
         {
           name: 'Other',
