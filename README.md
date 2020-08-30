@@ -9,7 +9,10 @@ npm install --save dotenv
 
 ## Environment Variables
 
-Add a `.env` file in the root directory and include token:
+Add a `.env` file in the root directory and include the following:
 ```
 TOKEN=ADD_TOKEN_HERE
+GIPHY_TOKEN=ADD_TOKEN_HERE
+DB_URL=ADD_URL_HERE
+PREFIX=ADD_PREFIX_HERE
 ```
